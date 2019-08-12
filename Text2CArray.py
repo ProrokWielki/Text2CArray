@@ -3,10 +3,28 @@ import yaml
 
 from PIL import Image, ImageDraw, ImageFont
 
+def create_header(texts):
+
+  with open("texts.h", "w") as header:
+
+    TopDecortaor = "#ifndef TEXTS_H\n#define TEXTS_H\n\n#include <stdint.h>\n\n"
+    BottomDecorator = "#endif /* TEXTS_H */"
+
+    header.write(TopDecortaor)
+
+    for text in texts:
+      header.write("extern uint8_t " + text["id"] + "[];\n")
+
+    header.write("\n" + BottomDecorator)
+
+
+
 with open("texts.yaml", 'r') as stream:
     config = yaml.safe_load(stream)
 
 defaults = config["Defaults"]
+
+
 
 for text_config in config["Texts"]:
   try:
@@ -21,9 +39,6 @@ for text_config in config["Texts"]:
 
   text = str(text_config["text"])
 
-  print(font_name)
-  print(font_size)
-
   font = ImageFont.truetype(font_name, font_size)
 
   text_size = font.getsize(text)
@@ -34,15 +49,23 @@ for text_config in config["Texts"]:
 
   array = numpy.asarray(image)
 
-  TopDecortaor = "#include <stdint.h>\nuint8_t  "+ text_config["id"] +"[] = {"
+  TopDecortaor = "#include <stdint.h>\n\nuint8_t  "+ text_config["id"] +"[] = {"
   BottomDecorator = "};"
 
   with open(text_config["id"]+".cpp",'w') as file:
-    file.write(TopDecortaor)
+    file.write(TopDecortaor + "\n")
+
+    line_length = 0
 
     for line in array:
         for pixel in line:
-            file.write(str(pixel) + ", ")
+            line_length += 6
+            file.write(f"0x{pixel:02x}" + ", ")
+            if line_length + 6 > 160:
+              file.write("\n")
+              line_length = 0 
             
     file.write(BottomDecorator)
+
+create_header(config["Texts"])
 

@@ -1,7 +1,16 @@
 import numpy
 import yaml
+import logging
+import argparse
 
 from PIL import Image, ImageDraw, ImageFont
+
+parser = argparse.ArgumentParser(description="Program converting providing text to C array.")
+
+required_named = parser.add_argument_group("Required named arguments")
+required_named.add_argument("--config",  dest="config_file", required=True,  help="Configuration file to be used.")
+
+args = parser.parse_args()
 
 def create_header(texts):
 
@@ -19,7 +28,7 @@ def create_header(texts):
 
 
 
-with open("texts.yaml", 'r') as stream:
+with open(args.config_file, 'r') as stream:
     config = yaml.safe_load(stream)
 
 defaults = config["Defaults"]

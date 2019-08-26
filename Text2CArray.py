@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import numpy
 import yaml
 import logging
@@ -8,12 +10,30 @@ from PIL import Image, ImageDraw, ImageFont
 parser = argparse.ArgumentParser(description="Program converting providing text to C array.")
 
 required_named = parser.add_argument_group("Required named arguments")
-required_named.add_argument("--config",  dest="config_file", required=True,  help="Configuration file to be used.")
+required_named.add_argument("--config",  dest="config_file", required=True, help="Configuration file to be used.")
 
 args = parser.parse_args()
 
-def create_header(texts):
+class Config:
+  '''
+    Class storing configuration.  
+  '''
+  def __init__(self, config, defaults=None):
+      '''
+        Constructor of the Config class.
+        config: the configuration dictionary.
+        defaults: Other instance of Config, containig defaults values for missing configuration fields.
+      '''
+      pass
+  def get(self, key):
+      '''
+        Returns the value of given key (configuration field). If requested key is missing, and defults are set,
+        it looks for the value in defaults.
+        key: the configuration key from which the value will be taken.
+      '''
+      pass
 
+def create_header(texts):
   with open("texts.h", "w") as header:
 
     TopDecortaor = "#ifndef TEXTS_H\n#define TEXTS_H\n\n#include <stdint.h>\n\n"

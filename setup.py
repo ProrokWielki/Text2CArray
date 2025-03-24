@@ -16,6 +16,7 @@ setup(name='Text2CArray',
       include_package_data=True,
       install_requires=[
           'pyyaml',
+          'numpy',
           'setuptools-git',
           'gitpython',
           'Pillow'

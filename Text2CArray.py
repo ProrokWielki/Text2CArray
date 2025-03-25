@@ -70,7 +70,7 @@ for text_config in config["Texts"]:
 
   font = ImageFont.truetype(font_name, font_size)
 
-  text_size = font.getsize(text)
+  text_size = font.getbbox(text)[2:4]
 
   image = Image.new("L", text_size, (0))
   image_draw = ImageDraw.Draw(image)
